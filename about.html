@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="images/favicon.png" type="" />
+
+    <style>
+        /* Add your custom CSS for the drawing board and rating section here */
+        #drawingCanvas {
+            border: 1px solid #000;
+            background-color: white;
+        }
+
+        .rating-section {
+            margin-top: 20px;
+            text-align: center;
+            color: white; /* Set the text color to white */
+        }
+
+        .rating-label {
+            font-weight: bold;
+        }
+
+        .rating-comment {
+            margin-top: 10px;
+        }
+
+        .whiteboard-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .whiteboard-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .whiteboard-border {
+    background: url('images/whiteboard-border.png') no-repeat center center;
+    background-size: contain; /* Adjust as necessary */
+    padding: 10px; /* Adjust the padding to fit the border size */
+    display: inline-block; /* To wrap the container around the canvas */
+}
+
+    </style>
+</head>
+
+<body class="sub_page">
+
+    <div class="hero_area">
+        <!-- Your header section goes here (similar to your provided code) -->
+        <!-- header section starts -->
+        <header class="header_section">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg custom_nav-container ">
+                    <a class="navbar-brand" href="index.html">
+                        <span>
+                            Hawa Art
+                        </span>
+                    </a>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class=""> </span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav  ">
+                            <li class="nav-item ">
+                                <a class="nav-link" href="index.html">Home </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="about.html"> Art Rating <span class="sr-only">(current)</span> </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <!-- end header section -->
+    </div>
+
+    <title>Hawa art</title>
+
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+
+    <!-- fonts style -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+    <!-- font awesome style -->
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="css/responsive.css" rel="stylesheet" />
+
+</head>
+
+<body class="sub_page">
+
+    <div class="hero_area">
+
+        <div class="hero_bg_box">
+            <div class="bg_img_box">
+                <img src="images/hero-bg.png" alt="">
+            </div>
+        </div>
+
+        <!-- about section -->
+
+        <section class="about_section layout_padding">
+          <div class="container">
+              <div class="heading_container heading_center">
+                  <h2>Drawing Board</h2>
+                  <div class="whiteboard-container">
+                      <!-- Canvas is now inside the div with the background image -->
+                      <div class="whiteboard-border">
+                          <canvas id="drawingCanvas" width="800" height="500"></canvas>
+                      </div>
+                      <div>
+                          <label for="colorPicker">Choose Color:</label>
+                          <input type="color" id="colorPicker" />
+                          <button onclick="clearCanvas()">Clear Canvas</button>
+                          <button onclick="rateDrawing()">Rate Drawing</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+      
+
+        <!-- Rating section -->
+        <section class="rating-section">
+            <div class="container">
+                <h3 class="rating-label">Rating:</h3>
+                <div id="ratingResult" class="rating-comment">Waiting for rating...</div>
+                <h3 class="rating-label">Comment:</h3>
+                <div id="commentResult" class="rating-comment">Waiting for comment...</div>
+            </div>
+        </section>
+
+        <!-- Your footer section goes here (similar to your provided code) -->
+
+        <script>
+            // JavaScript for drawing board
+            const canvas = document.getElementById('drawingCanvas');
+            const ctx = canvas.getContext('2d');
+            let drawing = false;
+            let strokeCount = 0;
+
+            canvas.addEventListener('mousedown', () => {
+                drawing = true;
+                ctx.beginPath();
+                strokeCount++;
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (!drawing) return;
+                ctx.lineWidth = 5;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = document.getElementById('colorPicker').value;
+
+                ctx.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+                ctx.stroke();
+            });
+
+            canvas.addEventListener('mouseup', () => {
+                drawing = false;
+                ctx.closePath();
+            });
+
+            function clearCanvas() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                strokeCount = 0;
+            }
+
+            // JavaScript for rating and commenting (Placeholder logic, you need to implement your own)
+            function rateDrawing() {
+                // Calculate rating based on stroke count
+                const rating = Math.min(Math.floor((strokeCount / 50) * 100), 100);
+                let comment = '';
+
+                if (rating <= 20) {
+                    comment = 'You are trash';
+                } else if (rating <= 50) {
+                    comment = 'Good effort';
+                } else if (rating <= 80) {
+                    comment = 'Impressive!';
+                } else {
+                    comment = 'Exceptional,dammmmmmmm!';
+                }
+
+                document.getElementById('ratingResult').textContent = `${rating}%`;
+                document.getElementById('commentResult').textContent = comment;
+            }
+        </script>
+    </section>
+
+    <!-- end about section -->
+    <!-- footer section -->
+    <section class="footer_section">
+        <div class="container">
+            <p>
+                &copy; <span id="displayYear"></span> All Rights Reserved By
+                <a href="https://www.instagram.com/tapash_j_kunwar/">Tapash.j.Kunwar</a>
+            </p>
+        </div>
+    </section>
+    <!-- footer section -->
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap.js -->
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <!-- Owl Carousel -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <!-- Custom.js -->
+    <script type="text/javascript" src="js/custom.js"></script>
+    <!-- Google Map -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
+    </script>
+    <!-- End Google Map -->
+
+</body>
+
+</html>
