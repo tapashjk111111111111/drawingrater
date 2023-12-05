@@ -47,13 +47,13 @@
             height: 100%;
             z-index: -1;
         }
-        .whiteboard-border {
-    background: url('images/whiteboard-border.png') no-repeat center center;
-    background-size: contain; /* Adjust as necessary */
-    padding: 10px; /* Adjust the padding to fit the border size */
-    display: inline-block; /* To wrap the container around the canvas */
-}
 
+        .whiteboard-border {
+            background: url('images/whiteboard-border.png') no-repeat center center;
+            background-size: contain; /* Adjust as necessary */
+            padding: 10px; /* Adjust the padding to fit the border size */
+            display: inline-block; /* To wrap the container around the canvas */
+        }
     </style>
 </head>
 
@@ -127,25 +127,25 @@
         <!-- about section -->
 
         <section class="about_section layout_padding">
-          <div class="container">
-              <div class="heading_container heading_center">
-                  <h2>Drawing Board</h2>
-                  <div class="whiteboard-container">
-                      <!-- Canvas is now inside the div with the background image -->
-                      <div class="whiteboard-border">
-                          <canvas id="drawingCanvas" width="800" height="500"></canvas>
-                      </div>
-                      <div>
-                          <label for="colorPicker">Choose Color:</label>
-                          <input type="color" id="colorPicker" />
-                          <button onclick="clearCanvas()">Clear Canvas</button>
-                          <button onclick="rateDrawing()">Rate Drawing</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </section>
-      
+            <div class="container">
+                <div class="heading_container heading_center">
+                    <h2>Drawing Board</h2>
+                    <div class="whiteboard-container">
+                        <!-- Canvas is now inside the div with the background image -->
+                        <div class="whiteboard-border">
+                            <canvas id="drawingCanvas" width="800" height="500"></canvas>
+                        </div>
+                        <div>
+                            <label for="colorPicker">Choose Color:</label>
+                            <input type="color" id="colorPicker" />
+                            <button onclick="toggleEraser()" id="eraserBtn">Eraser</button>
+                            <button onclick="clearCanvas()">Clear Canvas</button>
+                            <button onclick="rateDrawing()">Rate Drawing</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Rating section -->
         <section class="rating-section">
@@ -160,15 +160,20 @@
         <!-- Your footer section goes here (similar to your provided code) -->
 
         <script>
-            // JavaScript for drawing board
             const canvas = document.getElementById('drawingCanvas');
             const ctx = canvas.getContext('2d');
             let drawing = false;
+            let erasing = false;
             let strokeCount = 0;
 
             canvas.addEventListener('mousedown', () => {
                 drawing = true;
                 ctx.beginPath();
+                if (erasing) {
+                    ctx.strokeStyle = 'white'; // Use white color for erasing
+                } else {
+                    ctx.strokeStyle = document.getElementById('colorPicker').value;
+                }
                 strokeCount++;
             });
 
@@ -176,7 +181,6 @@
                 if (!drawing) return;
                 ctx.lineWidth = 5;
                 ctx.lineCap = 'round';
-                ctx.strokeStyle = document.getElementById('colorPicker').value;
 
                 ctx.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
                 ctx.stroke();
@@ -187,14 +191,23 @@
                 ctx.closePath();
             });
 
+            function toggleEraser() {
+                erasing = !erasing;
+                if (erasing) {
+                    document.getElementById('eraserBtn').textContent = 'Drawing';
+                    ctx.strokeStyle = 'white'; // Use white color for erasing
+                } else {
+                    document.getElementById('eraserBtn').textContent = 'Eraser';
+                    ctx.strokeStyle = document.getElementById('colorPicker').value;
+                }
+            }
+
             function clearCanvas() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 strokeCount = 0;
             }
 
-            // JavaScript for rating and commenting (Placeholder logic, you need to implement your own)
             function rateDrawing() {
-                // Calculate rating based on stroke count
                 const rating = Math.min(Math.floor((strokeCount / 50) * 100), 100);
                 let comment = '';
 
@@ -205,7 +218,7 @@
                 } else if (rating <= 80) {
                     comment = 'Impressive!';
                 } else {
-                    comment = 'Exceptional,dammmmmmmm!';
+                    comment = 'Exceptional, dammmmmmmm!';
                 }
 
                 document.getElementById('ratingResult').textContent = `${rating}%`;
