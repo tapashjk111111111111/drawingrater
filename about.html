@@ -27,11 +27,11 @@
         }
 
         .rating-label {
-            font-weight: bold;
+            font-weight: bolder;
         }
 
         .rating-comment {
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .whiteboard-container {
@@ -131,16 +131,28 @@
                 <div class="heading_container heading_center">
                     <h2>Drawing Board</h2>
                     <div class="whiteboard-container">
+                        
                         <!-- Canvas is now inside the div with the background image -->
                         <div class="whiteboard-border">
-                            <canvas id="drawingCanvas" width="800" height="500"></canvas>
-                        </div>
-                        <div>
                             <label for="colorPicker">Choose Color:</label>
-                            <input type="color" id="colorPicker" />
+                             <input type="color" id="colorPicker" />
                             <button onclick="toggleEraser()" id="eraserBtn">Eraser</button>
                             <button onclick="clearCanvas()">Clear Canvas</button>
-                            <button onclick="rateDrawing()">Rate Drawing</button>
+                             <button onclick="rateDrawing()">Rate Drawing</button>
+                             
+                            
+                            <canvas id="drawingCanvas" width="950" height="500"></canvas>
+                            <p>Okay,lets see your drawing skill</p>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                  <div class="img-box">
+                                    <img src="images/about-img.png" alt="">
+                                   
+                                  </div>
+                            
+                                </div>
+                             <div>
+                               
                         </div>
                     </div>
                 </div>
@@ -223,6 +235,10 @@
 
                 document.getElementById('ratingResult').textContent = `${rating}%`;
                 document.getElementById('commentResult').textContent = comment;
+
+                // Scroll to the rating section
+                const ratingSection = document.querySelector('.rating-section');
+                ratingSection.scrollIntoView({ behavior: 'smooth' });
             }
         </script>
     </section>
